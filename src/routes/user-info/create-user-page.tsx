@@ -12,35 +12,35 @@ import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axiosClient from "../../lib/axios/axios-client";
 
+const phoneRegex = new RegExp(/^[6-9]\d{9}$/);
+
 const formSchema = z.object({
   firstName: z
     .string()
     .min(3, {
-      message: "First name must be at least 3 characters.",
+      message: "First name must be at least 3 characters!",
     })
     .max(100, {
-      message: "First name can be at max 100 characters.",
+      message: "First name can be at max 100 characters!",
     }),
   lastName: z
     .string()
     .min(3, {
-      message: "Last name must be at least 3 characters.",
+      message: "Last name must be at least 3 characters!",
     })
     .max(100, {
-      message: "Last name can be at max 100 characters.",
+      message: "Last name can be at max 100 characters!",
     }),
   email: z
     .string()
-    .min(1, { message: "Email is required." })
-    .email("This is not a valid email."),
+    .min(1, { message: "Email is required!" })
+    .email("This is not a valid email!"),
   phone: z
     .string()
-    .min(1, {
-      message: "Phone number can only be be 10 characters.",
+    .length(10, {
+      message: "Phone number must be exactly 10 characters!",
     })
-    .max(10, {
-      message: "Phone number can only be be 10 characters.",
-    }),
+    .regex(phoneRegex, "This is not a valid phone number!"),
 });
 
 function CreateUserPage() {
