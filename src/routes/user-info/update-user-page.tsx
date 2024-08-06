@@ -64,7 +64,7 @@ function UpdateUserPage() {
     handleSubmit,
     setValue,
     reset,
-    formState: { isSubmitting, errors },
+    formState: { errors },
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -139,7 +139,7 @@ function UpdateUserPage() {
                   <Form.Label className="fw-light">First Name</Form.Label>
 
                   <Form.Control
-                    disabled={isSubmitting}
+                    disabled={updateUser.isPending}
                     type="text"
                     className="fw-light p-3"
                     {...register("firstName")}
@@ -158,7 +158,7 @@ function UpdateUserPage() {
                   <Form.Label className="fw-light">Last Name</Form.Label>
 
                   <Form.Control
-                    disabled={isSubmitting}
+                    disabled={updateUser.isPending}
                     type="text"
                     className="fw-light p-3"
                     {...register("lastName")}
@@ -179,7 +179,7 @@ function UpdateUserPage() {
                   <Form.Label className="fw-light">Email</Form.Label>
 
                   <Form.Control
-                    disabled={isSubmitting}
+                    disabled={updateUser.isPending}
                     type="email"
                     className="fw-light p-3"
                     {...register("email")}
@@ -198,7 +198,7 @@ function UpdateUserPage() {
                   <Form.Label className="fw-light">Phone</Form.Label>
 
                   <Form.Control
-                    disabled={isSubmitting}
+                    disabled={updateUser.isPending}
                     type="text"
                     className="fw-light p-3"
                     {...register("phone")}
@@ -216,6 +216,7 @@ function UpdateUserPage() {
             <Row>
               <Col className="d-flex justify-content-center align-items-center py-2 py-lg-3">
                 <Button
+                  disabled={updateUser.isPending}
                   variant="dark"
                   className="rounded-3 py-3 px-5"
                   type="submit"

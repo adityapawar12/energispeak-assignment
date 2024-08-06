@@ -48,7 +48,7 @@ function CreateUserPage() {
     register,
     handleSubmit,
     reset,
-    formState: { isSubmitting, errors },
+    formState: { errors },
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -115,7 +115,7 @@ function CreateUserPage() {
               <Form.Label className="fw-light">First Name</Form.Label>
 
               <Form.Control
-                disabled={isSubmitting}
+                disabled={createUser.isPending}
                 type="text"
                 className="fw-light p-3"
                 {...register("firstName")}
@@ -134,7 +134,7 @@ function CreateUserPage() {
               <Form.Label className="fw-light">Last Name</Form.Label>
 
               <Form.Control
-                disabled={isSubmitting}
+                disabled={createUser.isPending}
                 type="text"
                 className="fw-light p-3"
                 {...register("lastName")}
@@ -155,7 +155,7 @@ function CreateUserPage() {
               <Form.Label className="fw-light">Email</Form.Label>
 
               <Form.Control
-                disabled={isSubmitting}
+                disabled={createUser.isPending}
                 type="email"
                 className="fw-light p-3"
                 {...register("email")}
@@ -174,7 +174,7 @@ function CreateUserPage() {
               <Form.Label className="fw-light">Phone</Form.Label>
 
               <Form.Control
-                disabled={isSubmitting}
+                disabled={createUser.isPending}
                 type="text"
                 className="fw-light p-3"
                 {...register("phone")}
@@ -192,6 +192,7 @@ function CreateUserPage() {
         <Row>
           <Col className="d-flex justify-content-center align-items-center py-2 py-lg-3">
             <Button
+              disabled={createUser.isPending}
               variant="dark"
               className="rounded-3 py-3 px-5"
               type="submit"

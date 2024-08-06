@@ -9,6 +9,7 @@ import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import Root from "./routes/root";
 import CreateUserPage from "./routes/user-info/create-user-page";
 import UpdateUserPage from "./routes/user-info/update-user-page";
+import ListUsersPage from "./routes/user-info/list-users-page";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +18,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/users",
-    element: <Root />,
+    element: <ListUsersPage />,
   },
   {
     path: "/users/create",
