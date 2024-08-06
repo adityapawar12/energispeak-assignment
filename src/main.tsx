@@ -1,11 +1,40 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
-import "./index.css";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./index.css";
+
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+
+import Root from "./routes/root";
+import CreateUserPage from "./routes/user-info/create-user-page";
+import UpdateUserPage from "./routes/user-info/update-user-page";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+  },
+  {
+    path: "/users",
+    element: <Root />,
+  },
+  {
+    path: "/users/create",
+    element: <CreateUserPage />,
+  },
+  {
+    path: "/users/update/:id",
+    element: <UpdateUserPage />,
+  },
+]);
+
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </React.StrictMode>
 );

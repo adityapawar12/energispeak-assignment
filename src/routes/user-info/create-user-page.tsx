@@ -6,7 +6,11 @@ import Form from "react-bootstrap/Form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axiosClient from "../../lib/axios/axios-client";
 
 const formSchema = z.object({
   firstName: z
@@ -39,10 +43,11 @@ const formSchema = z.object({
     }),
 });
 
-function App() {
+function CreateUserPage() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { isSubmitting, errors },
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,19 +58,37 @@ function App() {
       phone: "",
     },
   });
+  const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
+  const createUser = useMutation({
+    mutationFn: (values: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      phone: string;
+    }) =>
+      axiosClient
+        .post("/user-information", values)
+        .then((response) => response),
+    onSuccess: () => {
+      toast("User info submitted!");
+      reset();
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      navigate("/users");
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (error: any) => {
+      console.log("error > > ", error.response.data.error);
+      toast(error.response.data.error);
+    },
+  });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-
-    axios.post("/api/save-user", values).then(
-      (response) => {
-        console.log(response);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    console.log("values >>> ", values);
+    createUser.mutateAsync(values);
   }
+
   return (
     <Container className="font-oswald">
       <Row>
@@ -173,13 +196,14 @@ function App() {
               className="rounded-3 py-3 px-5"
               type="submit"
             >
-              Submit
+              Create
             </Button>
           </Col>
         </Row>
       </Form>
+      <ToastContainer position="bottom-right" />
     </Container>
   );
 }
 
-export default App;
+export default CreateUserPage;
